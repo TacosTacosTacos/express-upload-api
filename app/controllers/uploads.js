@@ -1,4 +1,6 @@
 'use strict'
+const multer = require('multer')
+const multerUpload = multer({dest: '/tmp'})
 
 const controller = require('lib/wiring/controller')
 const models = require('app/models')
@@ -24,6 +26,9 @@ const show = (req, res) => {
 }
 
 const create = (req, res, next) => {
+  // multerUpload.single('image[file]')
+  console.log(req.body)
+  console.log(req.file)
   // const upload = Object.assign(req.body.upload, {
   //   _owner: req.user._id
   // })
@@ -61,8 +66,9 @@ module.exports = controller({
   update,
   destroy
 }, { before: [
+  {method: multerUpload.single('image[file]'), only: ['create']},
   { method: setUser, only: ['index', 'show'] },
-  { method: authenticate, except: ['index', 'show'] },
+  { method: authenticate, except: ['index', 'show', 'create'] },
   { method: setModel(Upload), only: ['show'] },
   { method: setModel(Upload, { forUser: true }), only: ['update', 'destroy'] }
 ] })

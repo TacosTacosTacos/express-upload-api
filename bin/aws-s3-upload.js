@@ -13,8 +13,8 @@ s3Upload(file)
   .then((s3Response) => {
     console.log('s3 response is ?', s3Response.Location)
     return Upload.create({
-      description: 'does this work?',
-      url: 'what is the url?'
+      description: file.name,
+      url: s3Response.Location
     })
   })
   .then(console.log)
